@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "SQLite.swift"
-  s.version          = "0.11.1"
+  s.version          = "0.11.2"
   s.summary          = "A type-safe, Swift-language layer over SQLite3 for iOS and OS X."
 
   s.description      = <<-DESC
@@ -25,8 +25,9 @@ Pod::Spec.new do |s|
   }
 
   s.subspec 'standard' do |ss|
-    ss.source_files = 'SQLite/**/*.{c,h,m,swift}'
-    ss.private_header_files = 'SQLite/Core/fts3_tokenizer.h'
+    ss.source_files = 'Sources/{SQLite,SQLiteObjc}/**/*.{c,h,m,swift}'
+    ss.exclude_files = 'Sources/**/Cipher.swift'
+    ss.private_header_files = 'Sources/SQLiteObjc/*.h'
 
     ss.library = 'sqlite3'
     ss.preserve_paths = 'CocoaPods/**/*'
@@ -46,10 +47,24 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'standalone' do |ss|
-    ss.source_files = 'SQLite/**/*.{c,h,m,swift}'
-    ss.private_header_files = 'SQLite/Core/fts3_tokenizer.h'
-    ss.xcconfig = { 'OTHER_SWIFT_FLAGS' => '$(inherited) -DSQLITE_SWIFT_STANDALONE' }
+    ss.source_files = 'Sources/{SQLite,SQLiteObjc}/**/*.{c,h,m,swift}'
+    ss.exclude_files = 'Sources/**/Cipher.swift'
+    ss.private_header_files = 'Sources/SQLiteObjc/*.h'
+    ss.xcconfig = {
+      'OTHER_SWIFT_FLAGS' => '$(inherited) -DSQLITE_SWIFT_STANDALONE'
+    }
 
-    ss.dependency 'sqlite3'
+    ss.dependency 'sqlite3', '>= 3.14.0'
+  end
+
+  s.subspec 'SQLCipher' do |ss|
+    ss.source_files = 'Sources/{SQLite,SQLiteObjc}/**/*.{c,h,m,swift}'
+    ss.private_header_files = 'Sources/SQLiteObjc/*.h'
+    ss.xcconfig = {
+      'OTHER_SWIFT_FLAGS' => '$(inherited) -DSQLITE_SWIFT_SQLCIPHER',
+      'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) SQLITE_HAS_CODEC=1'
+    }
+
+    ss.dependency 'SQLCipher', '>= 3.4.0'
   end
 end

@@ -1,0 +1,5 @@
+module CSQLite {
+    umbrella "/Users/wadetregaskis/Documents/SQLite.swift/Sources/CSQLite/include"
+    link "CSQLite"
+    export *
+}

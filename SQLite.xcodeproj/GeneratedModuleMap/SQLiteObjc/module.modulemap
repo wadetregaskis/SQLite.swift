@@ -1,0 +1,5 @@
+module SQLiteObjc {
+    umbrella "/Users/wadetregaskis/Documents/SQLite.swift/Sources/SQLiteObjc/include"
+    link "SQLiteObjc"
+    export *
+}
